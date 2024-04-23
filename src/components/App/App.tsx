@@ -1,36 +1,38 @@
-import LoadMoreBtn from '../components/LoadMoreBtn/LoaderMoreBtn';
-import SearchBar from '../components/SearchBar/SearchBar';
-import ImageGallery from '../components/ImageGallery/ImageGalerry';
-import Loader from '../components/Loader/Loader';
-import ErrorMessage from "../components/ErrorMessage/ErrorMessage"; 
-import ImageModal from '../components/ImageModal/ImageModal';
-import "modern-normalize";
+import LoadMoreBtn from '../LoadMoreBtn/LoaderMoreBtn';
+import SearchBar from '../SearchBar/SearchBar';
+import ImageGallery from '../ImageGallery/ImageGalerry';
+import Loader from '../Loader/Loader';
+import ErrorMessage from "../ErrorMessage/ErrorMessage"; 
+import ImageModal from '../ImageModal/ImageModal';
 import css from './App.module.css';
 
 import { Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
-import { requestPhotosByQuery } from '../services/api';
-
+import { requestPhotosByQuery } from '../../services/api';
+import { Photo } from './App.types';
+  
 function App() {
-  const [photos, setPhotos] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(null);
-  const [page, setPage] = useState(1);
-  const [modalImageUrl, setModalImageUrl] = useState(null);
+  const [photos, setPhotos] = useState<Photo[] | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [modalImageUrl, setModalImageUrl] = useState<string | null>(null);
 
- const onSearchQuery = (query) => {
+ const onSearchQuery = (query: string) => {
    setSearchQuery(query);
    setPage(1);
  };
 
+  const perPage = 10;
+  
   useEffect(() => {
     if (searchQuery === null) return;   
     async function fetchFotosByQuery() {
         try {
         setIsLoading(true);
         setIsError(false);
-        const data = await requestPhotosByQuery(searchQuery);
+        const data = await requestPhotosByQuery(searchQuery, page, perPage);
         setPhotos(data);
       } catch (error) {
         setIsError(true);
@@ -40,16 +42,22 @@ function App() {
     }
 
     fetchFotosByQuery();
-  }, [searchQuery]);
+  }, [searchQuery, page]);
 
     const loadMorePhotos = async () => {
     try {
       setIsLoading(true);
       const nextPage = page + 1; 
       const newData = searchQuery ?
-        await requestPhotosByQuery(searchQuery, nextPage) :
-        await requestPhotosByQuery(nextPage);
-        setPhotos(prevPhotos => [...prevPhotos, ...newData]); 
+        await requestPhotosByQuery(searchQuery, nextPage, perPage) :
+        await requestPhotosByQuery(nextPage, perPage, page);
+      
+      setPhotos((prevPhotos: Photo[] | null) => {
+        if (prevPhotos === null) {
+          return newData;
+        }
+        return [...prevPhotos, ...newData];
+      }); 
       setPage(nextPage); 
     } catch (error) {
       setIsError(true);
@@ -58,7 +66,7 @@ function App() {
     }
   };
  
-  const openModalWithImage = (imageUrl) => {
+  const openModalWithImage = (imageUrl: string | null) => {
     setModalImageUrl(imageUrl); 
   };
 
