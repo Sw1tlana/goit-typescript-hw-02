@@ -1,4 +1,4 @@
-import LoadMoreBtn from '../LoadMoreBtn/LoaderMoreBtn';
+import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGalerry';
 import Loader from '../Loader/Loader';
@@ -22,8 +22,8 @@ function App() {
  const onSearchQuery = (query: string) => {
    setSearchQuery(query);
    setPage(1);
- };
-
+  };
+  
   const perPage = 10;
   
   useEffect(() => {
@@ -32,7 +32,7 @@ function App() {
         try {
         setIsLoading(true);
         setIsError(false);
-        const data = await requestPhotosByQuery(searchQuery, page, perPage);
+        const data = await requestPhotosByQuery(searchQuery);
         setPhotos(data);
       } catch (error) {
         setIsError(true);
@@ -42,15 +42,15 @@ function App() {
     }
 
     fetchFotosByQuery();
-  }, [searchQuery, page]);
+  }, [searchQuery]);
 
     const loadMorePhotos = async () => {
     try {
       setIsLoading(true);
       const nextPage = page + 1; 
       const newData = searchQuery ?
-        await requestPhotosByQuery(searchQuery, nextPage, perPage) :
-        await requestPhotosByQuery(nextPage, perPage, page);
+        await requestPhotosByQuery(searchQuery) :
+        await requestPhotosByQuery(nextPage);
       
       setPhotos((prevPhotos: Photo[] | null) => {
         if (prevPhotos === null) {
@@ -66,8 +66,8 @@ function App() {
     }
   };
  
-  const openModalWithImage = (imageUrl: string | null) => {
-    setModalImageUrl(imageUrl); 
+  const openModalWithImage = (photo: Photo) => {
+    setModalImageUrl(photo.urls.regular); 
   };
 
   const closeModal = () => {
@@ -76,13 +76,21 @@ function App() {
 
   return (
     <div className={css.container}>
-    <SearchBar onSubmit={onSearchQuery} /> 
-    <Toaster />
-    <ImageGallery photos={photos} onImageClick={openModalWithImage}/>
+    <SearchBar
+        onSubmit={onSearchQuery} /> 
+    <Toaster />     
+    {photos &&
+        <ImageGallery
+        onImageClick={openModalWithImage} />}     
     {isLoading && <Loader/>} 
-    {isError && <ErrorMessage/>}
-    {photos && photos.length > 0 && <LoadMoreBtn onClick={loadMorePhotos}/>} 
-    {modalImageUrl && <ImageModal imageUrl={modalImageUrl} closeModal={closeModal} />}
+    {isError && <ErrorMessage />}     
+      {photos && photos.length > 0 &&
+        <LoadMoreBtn
+        onClick={loadMorePhotos} />} 
+    {modalImageUrl &&
+        <ImageModal
+        imageUrl={modalImageUrl}
+        closeModal={closeModal} />}
     </div>
   )
 }

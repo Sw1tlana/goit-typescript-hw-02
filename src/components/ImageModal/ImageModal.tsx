@@ -17,28 +17,33 @@ const customStyles = {
   },
 };
 
-const ImageModal = ({ imageUrl, closeModal }) => {
+interface ImageModalProps {
+  imageUrl: string;
+  closeModal: (imageUrl: string | null) => void;
+}
+
+const ImageModal: React.FC<ImageModalProps> = ({ imageUrl, closeModal }) => {
    
   useEffect(() => {
-const handleKeyDown = (event) => {
+const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') { 
-        closeModal();
+        closeModal(null);
       }
     };
         window.addEventListener('keydown', handleKeyDown);
     return () => {
         window.removeEventListener('keydown', handleKeyDown); 
     }
-  }, [closeModal]);
+  }, [closeModal, imageUrl]);
 
   return (
     <Modal
       isOpen={!!imageUrl}
-      onRequestClose={closeModal}
+      onRequestClose={() => closeModal(null)}
       style={customStyles}
       contentLabel="Image Modal"
     >
-      <div className={css.modalContainer}>
+      <div>
         <img src={imageUrl} alt="modal"/>
       </div>
     </Modal>
