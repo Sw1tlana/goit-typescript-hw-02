@@ -3,12 +3,12 @@ import { Photo } from '../App/App.types';
 
 interface ImageCardProps {
   photo: Photo;
-  onClick: (photo: Photo) => void; 
+  onClick(photo: Photo): void; 
 }
 
 const ImageCard: React.FC<ImageCardProps> = ({ photo, onClick }) => {
    const handleClick = () => {
-    onClick(photo);
+    onClick(photo); 
   };
   
   return (

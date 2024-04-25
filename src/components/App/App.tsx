@@ -32,7 +32,7 @@ function App() {
         try {
         setIsLoading(true);
         setIsError(false);
-        const data = await requestPhotosByQuery(searchQuery);
+        const data = await requestPhotosByQuery({ query: searchQuery!, page: 1, perPage: perPage });
         setPhotos(data);
       } catch (error) {
         setIsError(true);
@@ -48,16 +48,15 @@ function App() {
     try {
       setIsLoading(true);
       const nextPage = page + 1; 
-      const newData = searchQuery ?
-        await requestPhotosByQuery(searchQuery) :
-        await requestPhotosByQuery(nextPage);
-      
+      const data = await requestPhotosByQuery({ query: searchQuery!, page: nextPage, perPage });
+        
       setPhotos((prevPhotos: Photo[] | null) => {
-        if (prevPhotos === null) {
-          return newData;
-        }
-        return [...prevPhotos, ...newData];
-      }); 
+            if (!prevPhotos) {
+                return data;
+            }
+            return [...prevPhotos, ...data];
+      });
+      
       setPage(nextPage); 
     } catch (error) {
       setIsError(true);
@@ -81,6 +80,7 @@ function App() {
     <Toaster />     
     {photos &&
         <ImageGallery
+        photos={photos} 
         onImageClick={openModalWithImage} />}     
     {isLoading && <Loader/>} 
     {isError && <ErrorMessage />}     

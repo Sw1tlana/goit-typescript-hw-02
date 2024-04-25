@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import Modal from 'react-modal';
 
+Modal.setAppElement('#root');
+
 const customStyles = {
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.75)'
