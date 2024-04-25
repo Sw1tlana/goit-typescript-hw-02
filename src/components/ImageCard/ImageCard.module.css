@@ -5,8 +5,8 @@
 }
 
 .card {
-    width: 400px;
-    height: 300px;
+    width: 300px;
+    height: 200px;
     background-color: var(--light-background);
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -15,14 +15,14 @@
 
 .cardTitle {
     text-transform: uppercase;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     margin-top: 10px;
     margin-left: 20px;
 }
 
 .cardLikes {
-    font-size: 16px;
+    font-size: 14px;
     color: var(--black-background);
     margin-left: 20px;
 }
@@ -31,3 +31,17 @@
     color: var(--text-dark);
     font-weight: 500;
 }
+
+@media screen and (min-width: 768px) {
+    .card {
+        width: 400px;
+        height: 300px;
+    }
+    .cardTitle {
+        font-size: 18px;
+    }
+    .cardLikes {
+        font-size: 16px;
+    }
+}
+

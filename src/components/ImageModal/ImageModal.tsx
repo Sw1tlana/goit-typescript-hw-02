@@ -27,7 +27,7 @@ interface ImageModalProps {
 const ImageModal: React.FC<ImageModalProps> = ({ imageUrl, closeModal }) => {
    
   useEffect(() => {
-const handleKeyDown = (event: KeyboardEvent) => {
+  const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') { 
         closeModal(null);
       }

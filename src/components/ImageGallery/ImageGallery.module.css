@@ -6,8 +6,3 @@
     gap: 10px 14px;
 }
 
-.listItemPhoto {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}

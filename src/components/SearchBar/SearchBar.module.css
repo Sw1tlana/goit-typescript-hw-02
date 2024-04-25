@@ -16,7 +16,7 @@
 
 .inputSearch {
     position: relative;
-    padding: 8px 40px 8px 16px;
+    padding: 6px 24px 6px 14px;
     border-radius: 6px;
     font-family: inherit;
     width: 100%;
@@ -31,3 +31,10 @@
     border: none;
     cursor: pointer;
 }
+
+@media screen and (min-width: 768px) { 
+    .inputSearch {
+        padding: 8px 40px 8px 16px;
+    }
+}
+

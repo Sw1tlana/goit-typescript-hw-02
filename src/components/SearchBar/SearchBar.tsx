@@ -1,5 +1,6 @@
 import toast from 'react-hot-toast';
 import css from './SearchBar.module.css';
+
 import { BsSearch } from "react-icons/bs";
 import { FormEvent } from 'react';
 
